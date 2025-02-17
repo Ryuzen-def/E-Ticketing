@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/all.css">
+</head>
+<body class="bg-pattern">
+      <!-- Navbar -->
+  <nav id="navbar" class="navbar navbar-expand navbar-dark bg-primary-local ">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto" id="nav-links">
+        <li class="nav-item"><a class="nav-link active" href="/homepage">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">Flight </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/check-flight">Check Flight</a></li>
+            <li><a class="dropdown-item" href="/book-flight">Book Flight</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control" type="search" placeholder="Search" aria-label="Search" />
+        <button id="search-button" class="btn btn-primary btn-sm text-nowrap mx-3" type="submit">Search Flight</button>
+        <button id="logout-button" class="btn btn-danger text-nowrap btn-sm">Logout</button>
+      </form>
+    </div>
+  </nav>
+      <div class="contact-container">
+        <!-- Formulir dalam Card -->
+        <div class="form-container">
+            <div class="form-card">
+                <h2 class="text-center fw-bold mb-4">Contact Us</h2>
+                <h5 class="text-center fw-semibold mb-3">Report / Complaint Form</h5>
+                <form action="/contact" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-medium">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" required>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-medium">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="message" class="form-label fw-medium">Message</label>
+                        <textarea class="form-control" id="message" name="message" rows="4" placeholder="Enter your complaint or report" required></textarea>
+                    </div>
+    
+                    <button type="submit" class="btn btn-primary w-100 fw-medium">Submit</button>
+                </form>
+            </div>
+        </div>
+    
+        <!-- Informasi Kontak (di sebelah kanan) -->
+        <div class="contact-info">
+            <div class="contact-card text-center">
+                <i class="fa-solid fa-circle-user contact-icon mb-3"></i>
+                <h5 class="fw-semibold">Customer Support</h5>
+                <p><i class="fa-solid fa-phone text-success"></i> +62 812-3456-7890</p>
+                <p><i class="fa-brands fa-whatsapp text-success"></i> +62 813-9876-5432</p>
+            </div>
+    
+            <div class="contact-card text-center">
+                <i class="fa-solid fa-circle-user contact-icon mb-3"></i>
+                <h5 class="fw-semibold">Support Email</h5>
+                <p><i class="fa-solid fa-envelope text-danger"></i> support@example.com</p>
+                <p><i class="fa-solid fa-envelope text-danger"></i> helpdesk@example.com</p>
+            </div>
+        </div>
+    </div>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+</body>
+<script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-button");
+
+        if (logoutButton) {
+          logoutButton.addEventListener("click", async () => {
+            logoutButton.disabled = true;
+            try {
+              const response = await fetch(`/logout?_=${Date.now()}`, {
+                method: "GET",
+              });
+
+              if (response.ok) {
+                window.location.href = "/";
+              } else {
+                alert("Failed to logout. Please try again.");
+              }
+            } catch (error) {
+              console.error("Error during logout:", error);
+              alert("An error occurred while logging out. Please try again.");
+            } finally {
+              logoutButton.disabled = false;
+            }
+          });
+        } else {
+          console.error("Logout button not found.");
+        }
+      });
+      document.addEventListener("DOMContentLoaded", function() {
+          fetch("/session")
+            .then(response => response.json())
+            .then(data => {
+              if (data.success && data.user) {
+                const isAdmin = data.user.isAdmin === "Y";
+                const navLinks = document.getElementById("nav-links");
+                
+                if (isAdmin) {
+                  navLinks.innerHTML += `
+                    <li class="nav-item"><a class="nav-link" href="/ticket-list">Check Ticket List</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/confirm-admin">Confirm Transaction</a></li>
+                  `;
+                }
+              }
+            })
+            .catch(error => console.error("Error fetching session data:", error));
+        });
+</script>
+</html>
