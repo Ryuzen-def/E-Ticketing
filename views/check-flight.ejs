@@ -16,6 +16,54 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <style>
+      /* CSS untuk modal gambar */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        padding-top: 50px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.9);
+      }
+      
+      .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        position: relative;
+      }
+      
+      .close-image-modal {
+        color: #fff;
+        position: absolute;
+        right: 25px;
+        top: 0;
+        font-size: 35px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      
+      #modalImage {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        max-height: 80vh;
+        object-fit: contain;
+      }
+      
+      .close-image-modal:hover,
+      .close-image-modal:focus {
+        color: #999;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      </style>
   </head>
   <body class="bg-pattern">
      <!-- Navbar -->
@@ -64,12 +112,10 @@
     </div>
 
     <!-- Modal -->
-    <div id="ticketDetailModal" class="modal">
+    <div id="imageModal" class="modal">
       <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <div id="ticketDetailContent">
-          <!-- Konten modal akan diisi melalui JavaScript -->
-        </div>
+        <span class="close-image-modal">&times;</span>
+        <img id="modalImage" src="" alt="Payment Proof" style="width: 100%; height: auto;">
       </div>
     </div>
 
@@ -101,59 +147,108 @@
       }
 
       function renderTickets(ticketing) {
-        const tableBody = document.getElementById("ticket-table-body");
-        tableBody.innerHTML = ""; // Kosongkan isi tabel sebelum diisi ulang
+  const tableBody = document.getElementById("ticket-table-body");
+  tableBody.innerHTML = "";
 
-        function formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = date.toLocaleString("en", { month: "short" });
-        const year = date.getFullYear();
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
+  ticketing.forEach((ticket) => {
+    const imageUrl = ticket.proof ? `http://localhost:3000${ticket.proof}` : null;
+    
+    // Ubah tampilan menjadi button
+    const proofButton = ticket.proof 
+      ? `<div class="proof-cell">
+           <button 
+             class="btn btn-primary btn-sm view-proof-btn"
+             onclick="openImageModal('${imageUrl}')"
+           >
+             View Proof
+           </button>
+         </div>` 
+      : '<div class="proof-cell">No proof</div>';
 
-        return `${day}-${month}-${year} ${hours}:${minutes}`;
-      }
+    const row = `
+      <tr>
+        <td>${ticket.transaction_id}</td>
+        <td>${ticket.ticket_id}</td>
+        <td>${formatDate(ticket.transaction_date)}</td>
+        <td>Rp. ${formatPrice(ticket.grand_total)}</td>
+        <td>${ticket.isPaid}</td>
+        <td>${proofButton}</td>
+        <td>
+          <button class="btn btn-outline-dark btn-sm view-ticket-btn" data-ticket-id="${ticket.ticket_id}">
+            Detail
+          </button>
+        </td>
+      </tr>
+    `;
+    tableBody.innerHTML += row;
+  });
+}
 
-        ticketing.forEach((ticket) => {
-          console.log("Proof URL:", ticket.proof); // Log the proof URL to check its value
+// Fungsi untuk membuka modal gambar
+function openImageModal(imageUrl) {
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  
+  // Tambahkan event listener untuk loading
+  modalImg.onload = function() {
+    modal.style.display = "block";
+  };
+  
+  modalImg.onerror = function() {
+    alert('Failed to load image');
+  };
+  
+  modalImg.src = imageUrl;
+}
 
-          let className = "";
-          switch (ticket.class) {
-            case "First":
-              className = "First Class";
-              break;
-            case "Business":
-              className = "Business";
-              break;
-            case "Premium":
-              className = "Premium Economy";
-              break;
-            case "Economy":
-              className = "Economy";
-              break;
-            default:
-              className = "Unknown";
-          }
-          const row = `
-            <tr>
-              <td>${ticket.transaction_id}</td>
-              <td>${ticket.ticket_id}</td>
-              <td>${formatDate(ticket.transaction_date)}</td>
-              <td>Rp. ${formatPrice(ticket.grand_total)}</td>
-              <td>${ticket.isPaid}</td>
-              <td><img src="${ticket.proof}" alt="Proof" style="width: 100px; height: auto;"></td>
+// Event listener untuk menutup modal
+document.querySelector('.close-image-modal').addEventListener('click', function() {
+  document.getElementById('imageModal').style.display = "none";
+});
 
-              <td>
-                <button class="btn btn-outline-dark btn-sm view-ticket-btn" data-ticket-id="${
-                  ticket.ticket_id
-                }">Detail</button>
-              </td>
-            </tr>
-          `;
-          tableBody.innerHTML += row;
-        });
-      }
+// Menutup modal ketika mengklik di luar gambar
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('imageModal');
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+// Menutup modal dengan tombol ESC
+document.addEventListener('keydown', function(event) {
+  if (event.key === "Escape") {
+    document.getElementById('imageModal').style.display = "none";
+  }
+});
+
+// Fungsi untuk membuka modal gambar
+function openImageModal(imageUrl) {
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  
+  modal.style.display = "block";
+  modalImg.src = imageUrl;
+}
+
+// Event listener untuk menutup modal
+document.querySelector('.close-image-modal').addEventListener('click', function() {
+  document.getElementById('imageModal').style.display = "none";
+});
+
+// Menutup modal ketika mengklik di luar gambar
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('imageModal');
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+// Menutup modal dengan tombol ESC
+document.addEventListener('keydown', function(event) {
+  if (event.key === "Escape") {
+    document.getElementById('imageModal').style.display = "none";
+  }
+});
 
       window.onload = fetchTicketing;
 
