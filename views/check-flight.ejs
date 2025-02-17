@@ -116,6 +116,8 @@
       }
 
         ticketing.forEach((ticket) => {
+          console.log("Proof URL:", ticket.proof); // Log the proof URL to check its value
+
           let className = "";
           switch (ticket.class) {
             case "First":
@@ -133,28 +135,22 @@
             default:
               className = "Unknown";
           }
-
           const row = `
-           <tr>
-            <td>${ticket.transaction_id}</td>
-            <td>${ticket.ticket_id}</td>
-            <td>${formatDate(ticket.transaction_date)}</td>
-            <td>${formatPrice(ticket.grand_total)}</td>
-            <td>${ticket.isPaid}</td>
-            <% if (user && user.role === "admin") { %>
-              <td>${ticket.id_user}</td>
-            <% } %>
-            <td>
-              <button 
-                class="btn btn-outline-dark btn-sm view-ticket-btn" 
-                data-ticket-id="${ticket.ticket_id}"
-              >
-                Detail
-              </button>
-            </td>
-          </tr>
-        `;
+            <tr>
+              <td>${ticket.transaction_id}</td>
+              <td>${ticket.ticket_id}</td>
+              <td>${formatDate(ticket.transaction_date)}</td>
+              <td>Rp. ${formatPrice(ticket.grand_total)}</td>
+              <td>${ticket.isPaid}</td>
+              <td><img src="${ticket.proof}" alt="Proof" style="width: 100px; height: auto;"></td>
 
+              <td>
+                <button class="btn btn-outline-dark btn-sm view-ticket-btn" data-ticket-id="${
+                  ticket.ticket_id
+                }">Detail</button>
+              </td>
+            </tr>
+          `;
           tableBody.innerHTML += row;
         });
       }

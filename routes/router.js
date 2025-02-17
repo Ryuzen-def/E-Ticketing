@@ -16,7 +16,7 @@ const getBookedSeatsController = require('../controllers/getBookedSeatsControlle
 const getTransactionByIdController = require('../controllers/transactionController');
 const confirmController = require('../controllers/confirmController');
 const checkFlightController = require('../controllers/checkFlightController');
-const upload = require("../middlewares/multerMiddleware");
+const upload = require("../middlewares/upload"); // Import middleware upload
 
 // Define the route
 
@@ -26,7 +26,11 @@ router.post('/resetpass', resetpassController.resetPass);
 router.post('/addTicket', addTicketController.addTicket);
 // router.post('/transaction-entry', transactionController.transactionHandler);
 router.post('/order-ticket', orderController.orderTicket);
-router.post("/pay-complete", upload.single("proof"), transactionController.payTransaction);
+router.post(
+  "/pay-complete",
+  upload.single("proof"), // This should match the field name in the form
+  transactionController.payTransaction
+);
 router.post('/accept-transaction', confirmController.transactionAccept);
 
 router.get('/ticketing', ticketingController.ticketList);
