@@ -28,45 +28,55 @@ function getTransactionByIdController(req, res) {
   });
 }
 
-const payTransaction = async (req, res) => {
+const payTransaction = async (req, res, next) => {
   try {
+    // Validasi input
     const { transactionId, payment_method } = req.body;
-    const id_user = req.session.user ? req.session.user.id : null;
-    const transaction_date = new Date().toISOString().slice(0, 19).replace("T", " ");
+    const id_user = req.session.user?.id;
 
     if (!transactionId || !id_user || !payment_method) {
-      return res.status(400).json({ success: false, message: "Missing required fields." });
+      return res.status(400).json({ success: false, message: "Semua field wajib diisi." });
     }
 
-    let proofFileName = null;
-    if (req.file) {
-      proofFileName = req.file.originalname; // Hanya menyimpan nama file
-    } else {
-      return res.status(400).json({ success: false, message: "Payment proof is required." });
+    // Validasi file upload
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: "Bukti pembayaran wajib diunggah." });
     }
 
+    // Path file yang diunggah
+    const proofFilePath = `/storage/image/${req.file.filename}`;
+
+    // Query untuk memperbarui transaksi di database
+    const query = `
+      UPDATE transaction 
+      SET payment_method = ?, proof = ?, transaction_date = NOW(), isPaid = 'Y'
+      WHERE transaction_id = ? AND id_user = ?
+    `;
+
+    // Eksekusi query
     db.query(
-      `UPDATE transaction 
-       SET payment_method = ?, proof = ?, transaction_date = ?, isPaid = "Y"
-       WHERE transaction_id = ? AND id_user = ?`,
-      [payment_method, proofFileName, transaction_date, transactionId, id_user],
+      query,
+      [payment_method, proofFilePath, transactionId, id_user],
       (err, result) => {
         if (err) {
-          console.error("Database update error:", err);
-          return res.status(500).json({ success: false, message: "Failed to process transaction." });
+          console.error("Database error:", err);
+          return res.status(500).json({ success: false, message: "Gagal memproses pembayaran." });
         }
 
-        res.status(201).json({
+        // Jika berhasil
+        res.status(200).json({
           success: true,
-          message: "Transaction has been successfully paid!",
-          transactionId,
-          proofFileName,
+          message: "Pembayaran berhasil diproses!",
+          data: {
+            transactionId,
+            proofFilePath,
+          },
         });
       }
     );
   } catch (error) {
-    console.error("Error processing transaction:", error);
-    res.status(500).json({ success: false, message: "Failed to process transaction." });
+    console.error("Error:", error);
+    res.status(500).json({ success: false, message: "Terjadi kesalahan server." });
   }
 };
 
