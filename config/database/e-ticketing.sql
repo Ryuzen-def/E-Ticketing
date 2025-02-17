@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 16, 2025 at 01:26 PM
+-- Generation Time: Feb 17, 2025 at 04:44 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -66,6 +66,15 @@ CREATE TABLE `ms_order` (
   `grand_total` int DEFAULT NULL,
   `order_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `ms_order`
+--
+
+INSERT INTO `ms_order` (`order_id`, `id_user`, `ticket_id`, `passenger_name`, `seat_number`, `quantity`, `grand_total`, `order_date`) VALUES
+(250200001, 'ADMIN1', 250100001, '\"Raihan\"', '\"A1\"', 2, 13320000, '2025-02-17 05:38:48'),
+(250200002, 'ADMIN1', 250100001, '\"1\"', '\"B1\"', 2, 13320000, '2025-02-17 14:33:55'),
+(250200003, 'user', 250100001, '\"R\"', '\"C1\"', 2, 13320000, '2025-02-17 15:52:47');
 
 -- --------------------------------------------------------
 
@@ -236,6 +245,15 @@ CREATE TABLE `transaction` (
   `transaction_date` datetime DEFAULT NULL,
   `isConfirmed` varchar(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `transaction`
+--
+
+INSERT INTO `transaction` (`transaction_id`, `order_id`, `id_user`, `ticket_id`, `transaction_code`, `grand_total`, `payment_method`, `proof`, `isPaid`, `isCanceled`, `transaction_date`, `isConfirmed`) VALUES
+(250200001, 250200001, 'ADMIN1', 250100001, NULL, 13320000, 'CreditCard', 'Frame 110(2).png', 'Y', NULL, '2025-02-17 05:39:19', 'Y'),
+(250200002, 250200002, 'ADMIN1', 250100001, NULL, 13320000, 'BankTransfer', '/storage/image/1739802845238-582928462.png', 'Y', NULL, '2025-02-17 21:34:05', NULL),
+(250200003, 250200003, 'user', 250100001, NULL, 13320000, 'CreditCard', '/storage/image/1739807580801-551035069.png', 'Y', NULL, '2025-02-17 22:53:00', NULL);
 
 --
 -- Indexes for dumped tables
