@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="s tylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/font-awesome.css" />
+    <link rel="stylesheet" href="/css/all.css" />
+    <link rel="stylesheet" href="/css/style.css">
+  </head>
+  <body class="bg-pattern">
+    <section
+      class="vh-100 d-flex flex-column align-items-center justify-content-center"
+    >
+      <!-- Bagian Gambar / Logo -->
+      <div class="mb-5">
+        <img
+          src="image/logo.png"
+          class="img-fluid rounded mx-auto d-block"
+          alt="Logo"
+          style="max-width: 220px"
+        />
+      </div>
+
+      <!-- Bagian Form Login -->
+      <div class="col-md-6 col-lg-4">
+        <form id="loginForm" method="post">
+          <!-- Email input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <label for="id" class="form-label">Your ID</label>
+            <input
+              type="text"
+              class="form-control"
+              id="id"
+              aria-describedby="idHelp"
+              placeholder="Enter Your ID"
+              required
+            />
+          </div>
+
+          <!-- Password input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <label for="password" class="form-label">Your Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              placeholder="Enter Your Password"
+              required
+            />
+          </div>
+
+          <div class="d-flex justify-content-around align-items-center mb-4">
+            <!-- Checkbox -->
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value=""
+                id="form1Example3"
+                checked
+              />
+              <label class="form-check-label" for="form1Example3">
+                Remember me
+              </label>
+            </div>
+            <a href="/reset-password">Forgot password?</a>
+          </div>
+
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-primary col-12">Login</button>
+          <a href="/register" class="d-flex justify-content-center mt-3"
+            >Don't have an account?</a
+          >
+          <div id="message" class="mt-3"></div>
+        </form>
+      </div>
+    </section>
+
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script>
+      // API URL (replace with your backend URL)
+      const apiUrl = "http://localhost:3000/login";
+
+      // Handle form submission
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async function (event) {
+          event.preventDefault(); // Prevent form from submitting normally
+
+          // Get values from the form
+          const id = document.getElementById("id").value;
+          const password = document.getElementById("password").value;
+
+          // Create the login data
+          const loginData = {
+            id: id,
+            password: password,
+          };
+
+          try {
+            // Make the POST request to the backend
+            const response = await fetch(apiUrl, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(loginData),
+            });
+
+            const result = await response.json();
+
+            // Check for successful login
+            if (response.ok) {
+              // Show success message
+              document.getElementById("message").textContent =
+                "Login successful!";
+              document.getElementById("message").style.color = "gre en";
+              location.href = "/homepage";
+            } else {
+              // Show error message
+              document.getElementById("message").textContent =
+                result.error || "Login failed!";
+              document.getElementById("message").style.color = "red";
+            }
+          } catch (error) {
+            // Handle network or other errors
+            document.getElementById("message").textContent =
+              "Error: " + error.message;
+            document.getElementById("message").style.color = "red";
+          }
+        });
+    </script>
+  </body>
+</html>

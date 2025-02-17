@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction Entry - Confirm Payment</title>
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/font-awesome.css" />
+    <link rel="stylesheet" href="/css/all.css" />
+    <script>
+      async function fetchTransaction(ticketId) {
+        try {
+          // Fetch ticket details by ID
+          const response = await fetch(
+            `http://localhost:3000/ticket/${ticketId}`
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch ticket details");
+          }
+
+          const ticket = await response.json();
+
+          // Populate the form with ticket details
+          document.getElementById("ticketId").value = ticket.ticket_id;
+          document.getElementById("airplane").value = ticket.airplane;
+          document.getElementById("departure").value = ticket.departure;
+          document.getElementById("arrival").value = ticket.arrival;
+          document.getElementById("class").value = ticket.class;
+          document.getElementById("seatnumber").value = ticket.seat_number;
+          document.getElementById("price").value = `Rp. ${formatRupiah(
+            ticket.price.toString()
+          )}`;
+          document.getElementById("takeoff").value = ticket.take_off;
+          document.getElementById("landing").value = ticket.landing;
+        } catch (error) {
+          console.error("Error fetching ticket details:", error);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // Get the ticket ID from query params or any other source
+        const urlParams = new URLSearchParams(window.location.search);
+        const ticketId = urlParams.get("ticketId");
+
+        if (ticketId) {
+          fetchTransaction(ticketId);
+        } else {
+          console.error("Ticket ID not provided in URL.");
+        }
+
+        // Format Rupiah for price inputs
+        function formatRupiah(angka) {
+          return angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+      });
+    </script>
+
+<nav class="bg-primary-local shadow-sm p-2">
+  <div class="container mx-3">
+    <button type="button" class="flex btn text-white" id="cancelButton">
+      <i class="fas fa-arrow-left mx-1"></i> <span>Cancel</span>
+    </button>
+  </div>
+</nav>
+  <body class="bg-pattern">
+    <!-- Page Content -->
+    <div class="container">
+      <h1 class="text-center mb-4">Transaction Entry</h1>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card border-primary">
+            <div class="card-header bg-primary text-white text-center">
+              Ticket Details
+            </div>
+            <div class="card-body">
+              
+                <div class="mb-2">
+                  <label for="ticketId" class="form-label text-secondary"
+                    >Ticket ID</label
+                  >
+                  <input
+                    type="text"
+                    id="ticketId"
+                    class="form-control"
+                    value="<%= transaction.ticket_id %>"
+                    disabled
+                  />
+                </div>
+                <div class="mb-2">
+                  <label for="passengerName" class="form-label text-secondary"
+                    >Passenger Name</label
+                  >
+                  <input
+                    type="text"
+                    id="passengerName"
+                    class="form-control"
+                    value="<%= transaction.passenger_name %>"
+                    disabled
+                  />
+                </div>
+                <div class="mb-2">
+                  <label for="airplane" class="form-label text-secondary"
+                    >Airlines</label
+                  >
+                  <input
+                    type="text"
+                    id="airplane"
+                    class="form-control"
+                    value="<%= transaction.id_pesawat %>"
+                    disabled
+                  />
+                </div>
+                <div class="mb-2">
+                  <label for="departure" class="form-label text-secondary"
+                    >Departure</label
+                  >
+                  <input
+                    type="text"
+                    id="departure"
+                    class="form-control"
+                    value="<%= transaction.departure_code %>"
+                    disabled
+                  />
+                </div>
+                <div class="mb-2">
+                  <label for="arrival" class="form-label text-secondary"
+                    >Arrival</label
+                  >
+                  <input
+                    type="text"
+                    id="arrival"
+                    class="form-control"
+                    value="<%= transaction.arrival_code %>"
+                    disabled
+                  />
+                </div>
+                <div class="mb-2">
+                  <label for="class" class="form-label text-secondary"
+                    >Class</label
+                  >
+                  <input type="text" 
+                  id="class" 
+                  class="form-control" 
+                  value="<%= transaction.class %>"
+                  disabled />
+                </div>
+                <div class="mb-2">
+                  <label for="seatnumber" class="form-label text-secondary"
+                    >Seat Number</label
+                  >
+                  <input
+                    type="text"
+                    id="seatnumber"
+                    class="form-control"
+                    value="<%= transaction.seat_number %>"
+                    disabled
+                  />
+                </div>
+                <div class="mb-2">
+                  <label for="qty" class="form-label text-secondary"
+                    >Quantity</label
+                  >
+                  <input
+                    type="text"
+                    id="qty"
+                    class="form-control"
+                    value="<%= transaction.quantity %>"
+                    disabled
+                  />
+                </div>
+                <div class="mb-2">
+                  <label for="price" class="form-label text-secondary"
+                    >Price</label
+                  >
+                  <div class="input-group">
+                    <span class="input-group-text">Rp.</span>
+                  <input
+                    type="text"
+                    id="price"
+                    class="form-control"
+                    value="<%= transaction.price %>"
+                    disabled
+                  />
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <label for="grandtotal" class="form-label text-secondary"
+                    >Grand Total (Tax Included)</label
+                  >
+                  <div class="input-group">
+                    <span class="input-group-text">Rp.</span>
+                  <input type="text" 
+                  id="grandtotal" 
+                  class="form-control" 
+                  value="<%= transaction.grand_total %>"
+                  disabled />
+                  </div>
+                </div>
+                
+            
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Confirmation Form -->
+        <div class="col-md-6">
+          <div class="card border-primary">
+            <div class="card-header bg-primary text-white text-center">
+              Confirm Payment
+            </div>
+            <div class="card-body">
+              <form
+              id="confirmPaymentForm"
+              method="POST"
+              action="/confirm-payment"
+              enctype="multipart/form-data"
+              >
+                <div class="mb-2">
+                  <label for="paymentMethod" class="form-label text-primary"
+                    >Payment Method</label
+                  >
+                  <select
+                    id="paymentMethod"
+                    name="paymentMethod"
+                    class="form-select"
+                    required
+                  >
+                    <option hidden selected>Select Payment Method</option>
+                    <option value="CreditCard">Credit Card</option>
+                    <option value="BankTransfer">Bank Transfer</option>
+                    <option value="E-Wallet">E-Wallet</option>
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <label for="paymentProof" class="form-label text-primary"
+                    >Upload Payment Proof</label
+                  >
+                  <input
+                    type="file"
+                    id="paymentProof"
+                    name="paymentProof"
+                    class="form-control"
+                  />
+                </div>
+                <div class="d-flex justify-content-end mt-2">
+                  <button type="button" class="btn btn-light btn-outline-dark me-2" id="cancelButton2">Cancel</button>
+                  <button type="submit" class="btn btn-primary">
+                    Confirm Payment
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      
+      document.addEventListener("DOMContentLoaded", function () {
+        function showModal() {
+          let modalContainer = document.createElement("div");
+          modalContainer.id = "modalContainer";
+          modalContainer.innerHTML = `
+            <div class="modal fade show" id="cancelModal" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Confirm Cancellation</h5>
+                    <button type="button" class="btn-close btn-close-white" id="closeModalButton"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p class="mb-0">Are you sure you want to cancel this transaction? Your data will not be saved.</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="noCancel">No</button>
+                    <button type="button" class="btn btn-danger" id="confirmCancel">Yes, Cancel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          document.body.appendChild(modalContainer);
+          document.getElementById("confirmCancel").addEventListener("click", function () {
+            window.location.href = "/book-flight";
+          });
+          document.getElementById("closeModalButton").addEventListener("click", closeModal);
+          document.getElementById("noCancel").addEventListener("click", closeModal);
+        }
+
+        function closeModal() {
+          let modalContainer = document.getElementById("modalContainer");
+          if (modalContainer) modalContainer.remove();
+        }
+
+        document.getElementById("cancelButton").addEventListener("click", showModal);
+        document.getElementById("cancelButton2").addEventListener("click", showModal);
+      });
+
+
+
+      document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("confirmPaymentForm");
+
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const paymentMethod = document.getElementById("paymentMethod").value;
+    const proofInput = document.getElementById("paymentProof").files[0]; 
+    const submitButton = form.querySelector('button[type="submit"]');
+    const transactionId = "<%= transaction.order_id %>"; 
+
+    if (!paymentMethod) {
+        alert("Please select a payment method.");
+        return;
+    }
+
+    if (!transactionId || transactionId.trim() === "") {
+        alert("Transaction ID is missing. Please refresh the page.");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("transactionId", transactionId);
+    formData.append("payment_method", paymentMethod);
+
+    // Validasi file proof jika ada
+    if (proofInput) {
+        const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+        if (!allowedTypes.includes(proofInput.type)) {
+            alert("Invalid file type. Please upload JPG, PNG, or PDF.");
+            return;
+        }
+
+        if (proofInput.size > 2 * 1024 * 1024) { // 2MB limit
+            alert("File size exceeds 2MB. Please upload a smaller file.");
+            return;
+        }
+
+        formData.append("proof", proofInput);
+    }
+
+    // Tampilkan loading indicator pada tombol submit
+    submitButton.disabled = true;
+    submitButton.innerHTML = "Processing...";
+
+    try {
+        const response = await fetch("/pay-complete", {
+            method: "POST",
+            body: formData, 
+        });
+
+        const result = await response.json(); // Mengubah respons ke JSON
+
+        if (response.ok && result.success) {
+            alert(result.message);
+            window.location.href = "/check-flight"; // Selalu kembali ke check-flight
+        } else {
+            alert("Error: " + (result.message || "An error occurred"));
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred. Please try again.");
+    } finally {
+        // Kembalikan tombol submit ke kondisi semula
+        submitButton.disabled = false;
+        submitButton.innerHTML = "Confirm Payment";
+    }
+});
+});
+
+    </script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+  </body>
+</html>

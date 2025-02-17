@@ -1,0 +1,746 @@
+/* Font Quicksand */
+@font-face {
+    font-family: 'Quicksand';
+    src: url('/fonts/Quicksand/static/Quicksand-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('/fonts/Quicksand/static/Quicksand-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('/fonts/Quicksand/static/Quicksand-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('/fonts/Quicksand/static/Quicksand-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Quicksand';
+    src: url('/fonts/Quicksand/static/Quicksand-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+/* Font Poppins */
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+}
+
+/* Style Italic */
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-ThinItalic.ttf') format('truetype');
+    font-weight: 100;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-ExtraLightItalic.ttf') format('truetype');
+    font-weight: 200;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-SemiBoldItalic.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-BoldItalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-ExtraBoldItalic.ttf') format('truetype');
+    font-weight: 800;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('/fonts/Poppins/Poppins-BlackItalic.ttf') format('truetype');
+    font-weight: 900;
+    font-style: italic;
+}
+
+
+/* Menghilangkan tombol spinner pada input number */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+    
+}
+body{
+    font-family: 'Quicksand' ,sans-serif;
+    font-weight: 400;
+}
+h1{
+    font-family: 'Poppins' ,sans-serif;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+th{
+    font-family: 'Poppins' ,sans-serif;
+    font-weight: 800;
+}
+
+
+.text-primary-local {
+    color: #2793ff;
+}
+.container div h2{
+    font-family: 'Poppins' ,sans-serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.059);
+}
+/* Navbar */
+.navbar {
+    margin: 0;
+    padding: 25px;
+    color: white;
+    position: sticky;
+    top: 0;
+    /* width: 100%; */
+    z-index: 1030;
+}
+
+.bg-primary {
+    background-color: #007bff !important;
+}
+
+.bg-primary-local {
+    background-color: #007AFF;
+}
+
+/* Centering Card */
+.card {
+    margin: 20px auto;
+    max-width: 600px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.card-header {
+    text-align: center;
+    font-size: 18px;
+}
+
+/* Status Colors */
+.error {
+    color: red;
+}
+
+.success {
+    color: green;
+}
+
+.loading {
+    color: blue;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 0px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    max-height: 80%;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Close Button */
+.close-btn {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+}
+
+/* Table Styling */
+.table {
+    margin-top: 20px;
+}
+
+.table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.table td, .table th {
+    text-align: center;
+}
+
+.rounded-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rounded-table thead th {
+    background-color: #2793ff;
+    color: white;
+    padding: 12px;
+}
+
+.rounded-table tbody td {
+    background-color: #ffffff;
+    padding: 12px;
+    border-top: 1px solid #ddd;
+}
+
+.rounded-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.rounded-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Table Corner Radius */
+.rounded-table th:first-child,
+.rounded-table td:first-child {
+    border-top-left-radius: 12px;
+}
+
+.rounded-table th:last-child,
+.rounded-table td:last-child {
+    border-top-right-radius: 12px;
+}
+
+.rounded-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 12px;
+}
+
+.rounded-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 12px;
+}
+/* Background Fullscreen */
+.bg-home {
+    background: url('/image/bg-home.jpg') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    min-height: 100vh;
+}
+.bg-pattern {
+    background: url('/image/bg-pattern.png') no-repeat center center fixed;
+    background-size: cover;
+    position: relative;
+    min-height: 100vh;
+}
+
+
+
+/* Overlay untuk meningkatkan keterbacaan teks */
+.hero-overlay {
+    background: rgba(0, 0, 0, 0.4);
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    padding: 120px 20px;
+}
+
+/* Teks pada Hero Section */
+.hero-overlay h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-overlay p {
+    font-size: 1.3rem;
+    opacity: 0.9;
+}
+
+/* Box Pencarian */
+.search-box {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px 20px;  /* Menambah padding atas bawah dan mengurangi padding kiri-kanan */
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 900px;  /* Memperbesar lebar container */
+    margin: auto;
+}
+
+/* Elemen dalam Search Box */
+.search-box .row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Membungkus select dan icon dalam satu container */
+.search-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Styling untuk select (departure dan arrival) */
+.search-box .form-select {
+    font-size: 1.2rem;  /* Memperbesar ukuran font */
+    padding: 15px;  /* Menambah padding untuk memberikan ruang lebih */
+    border-radius: 8px;  /* Menambahkan border-radius agar lebih halus */
+    height: 60px;  /* Memperbesar tinggi untuk select dan input */
+    width: 100%; /* Menyesuaikan lebar dengan container */
+}
+
+/* Styling untuk input type date */
+.search-box input[type="date"] {
+    font-size: 1.2rem; /* Sama dengan form-select */
+    padding: 15px;
+    border-radius: 8px;
+    height: 60px;
+    width: 100%; /* Membuat input date lebih lebar, setara dengan select */
+}
+
+/* Styling untuk input group icon dan select */
+.input-group-text {
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 10px 10px;
+    margin-right: 15px;
+    width: 80px;
+    height: 60px;
+    display: flex;
+}
+
+.input-group-text i {
+
+}
+
+/* Tombol Pencarian */
+.search-button {
+    background: #007AFF;
+    color: white;
+    border-radius: 8px;
+    padding: 12px 20px;  /* Menambah padding agar tombol lebih besar */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+    border: none;
+    width: 100%;  /* Memastikan tombol memiliki lebar yang konsisten */
+    margin-top: 15px;  /* Memberikan jarak antara elemen dan tombol */
+}
+
+/* Icon pada tombol pencarian */
+.search-button i {
+    margin-left: 10px;  /* Memberikan margin pada ikon agar lebih jauh dari teks */
+}
+
+/* Hover Effect untuk Button Search */
+.search-button:hover {
+    background: #004085;  /* Warna background berubah saat hover */
+    opacity: 0.9;
+}
+
+/* Section News dengan Border-Radius */
+.news-section {
+    background: #f8f9fa;
+    padding: 50px 0;  /* Menambah padding atas dan bawah agar tidak menempel dengan search-box */
+    margin-top: 50px;  /* Memberikan jarak antara section ini dengan elemen sebelumnya */
+    border-radius: 15px;  /* Menambahkan border-radius pada container */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);  /* Memberikan sedikit bayangan */
+}
+
+/* Styling untuk container di dalam News Section */
+.news-section .container {
+    border-radius: 15px;  /* Border-radius untuk membuat container lebih melengkung */
+    padding: 0 20px;  /* Memberikan padding horizontal */
+}
+
+/* News Card Styling */
+.news-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;  /* Efek hover untuk animasi */
+}
+
+.news-card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.news-card h5 {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.news-card p {
+    font-size: 1rem;
+    color: #6c757d;
+}
+
+/* Efek Hover pada News Card */
+.news-card:hover {
+    transform: translateY(-5px);  /* Memberikan efek hover dengan sedikit pergerakan */
+}
+
+/* Responsivitas pada News Section */
+@media (max-width: 768px) {
+    .news-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .news-card {
+        padding: 15px;
+    }
+}
+
+.ticket-details-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 95%;
+    background: white;
+    border-radius: 10px;
+    padding: 20px; /* Kurangi padding agar lebih luas */
+    position: relative;
+    
+    
+    /* 🔹 Pastikan gambar memenuhi container tanpa terpotong */
+    background-image: url('/image/bg-tck.png');
+    background-size: cover; /* Gambar tetap proporsional */
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100%; /* Pastikan container mengambil seluruh tinggi */
+    min-height: 600px; /* Tambahkan batas minimum */
+
+}
+.content-ticket {
+    width: 80%;
+}
+
+/* ====== Styling untuk Text ====== */
+.ticket-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 40px;
+    color: black; /* 🔹 Warna teks */
+}
+
+/* ====== Grid untuk Detail Tiket ====== */
+.details-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; /* Distribusi merata */
+    margin-left: 20px;
+    font-size: 16px;
+}
+
+/* 🔹 Setiap item memiliki lebar 33.3% agar sejajar */
+.details-grid div {
+    width: 33.333%;
+    text-align: left; /* 🔹 Perataan teks */
+    margin-bottom: 70px;
+}
+
+/* 🔹 Gaya untuk teks di dalam grid */
+.details-grid p {
+    margin-bottom: 5px;
+    color: rgb(43, 43, 43)
+}
+
+/* 🔹 Gaya untuk judul di dalam grid */
+.details-grid div p strong {
+    font-family: 'Quicksand',sans-serif;
+    font-weight: 700;
+}
+
+/* 🔹 Responsif: Jika layar kecil, ubah jadi 2 kolom */
+@media (max-width: 768px) {
+    .details-grid div {
+        width: 50%;
+    }
+}
+
+/* 🔹 Responsif: Jika layar sangat kecil, ubah jadi 1 kolom */
+@media (max-width: 480px) {
+    .details-grid div {
+        width: 100%;
+    }
+}
+
+
+/* Button Styles */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger:hover {
+    background-color: #b30000;
+}
+/* Styling khusus untuk halaman Contact */
+.contact-container {
+    max-width: 900px;
+    margin: 40px auto 20px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex; /* Mengatur form dan info dalam satu baris */
+    justify-content: space-between; /* Jarak antar elemen */
+    align-items: stretch; /* Menjaga elemen tetap sejajar */
+    gap: 20px;
+}
+
+/* Styling umum untuk teks */
+.contact-container h2 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Styling Form */
+.form-container {
+    flex: 1; /* Form mengambil ruang utama */
+}
+
+.form-card {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%; /* Menyesuaikan tinggi dengan parent */
+}
+
+.form-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.contact-form label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+.contact-form textarea {
+    resize: none;
+    height: 150px;
+}
+
+.contact-form button {
+    background: #2793ff;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.contact-form button:hover {
+    background: #007bff;
+}
+
+/* Styling untuk Contact Info */
+.contact-info {
+    flex: 1; /* Menggunakan ruang yang sama dengan form */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Styling untuk card di dalam Contact Info */
+.contact-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    background: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Pusatkan konten */
+    align-items: center;
+    flex: 1; /* Membuat kedua card memiliki tinggi yang sama */
+}
+
+.contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .contact-container {
+        flex-direction: column;
+    }
+
+    .contact-info {
+        width: 100%;
+    }
+
+    .contact-card {
+        flex: unset; /* Mengembalikan tinggi normal untuk mobile */
+    }
+}
+
+

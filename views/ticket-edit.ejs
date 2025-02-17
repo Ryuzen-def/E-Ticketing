@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Ticketing - Edit Ticket</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/font-awesome.css" />
+    <link rel="stylesheet" href="/css/all.css" />
+    <script>
+      async function fetchMaskapai() {
+        try {
+          const response = await fetch("http://localhost:3000/maskapai");
+          const users = await response.json();
+
+          const tableBody = document.getElementById("pswt");
+          tableBody.innerHTML =
+            "<option hidden selected>Select Maskapai</option>";
+
+          users.forEach((maskapai) => {
+            const row = `<option value="${maskapai.id_pesawat}">${maskapai.nama_pesawat}</option>`;
+            tableBody.innerHTML += row;
+          });
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      }
+
+      async function fetchAirport() {
+        try {
+          const response = await fetch("http://localhost:3000/airport");
+          const airports = await response.json();
+
+          const airportFromSelect = document.getElementById("airportfrom");
+          const airportToSelect = document.getElementById("airportto");
+
+          airportFromSelect.innerHTML =
+            "<option hidden selected>Select Departure Airport</option>";
+          airportToSelect.innerHTML =
+            "<option hidden selected>Select Arrival Airport</option>";
+
+          const groupedAirports = airports.reduce((acc, airport) => {
+            if (!acc[airport.country]) {
+              acc[airport.country] = [];
+            }
+            acc[airport.country].push(airport);
+            return acc;
+          }, {});
+
+          Object.entries(groupedAirports).forEach(([country, airports]) => {
+            const optGroupFrom = document.createElement("optgroup");
+            const optGroupTo = document.createElement("optgroup");
+
+            optGroupFrom.label = country;
+            optGroupTo.label = country;
+
+            airports.forEach((airport) => {
+              const option = `<option value="${airport.airport_code}">${airport.city} - ${airport.airport_detail} (${airport.airport_code})</option>`;
+              optGroupFrom.innerHTML += option;
+              optGroupTo.innerHTML += option;
+            });
+
+            airportFromSelect.appendChild(optGroupFrom);
+            airportToSelect.appendChild(optGroupTo);
+          });
+        } catch (error) {
+          console.error("Error fetching airports:", error);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const priceInput = document.getElementById("price");
+
+        // Format the price input on load
+        const currentPrice = "<%= ticket.price %>"; // Assuming this is the current price from the server
+        priceInput.value = formatRupiah(currentPrice.replace(/[^0-9]/g, "")); // Format the price for display
+
+        priceInput.addEventListener("input", (e) => {
+          formatPrice(e.target);
+        });
+
+        function formatPrice(input) {
+          let value = input.value.replace(/[^0-9]/g, ""); // Only numbers
+          input.value = formatRupiah(value); // Format the number with dots
+        }
+
+        function formatRupiah(angka) {
+          return angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        fetchMaskapai();
+        fetchAirport();
+      });
+    </script>
+  </head>
+  <body class="bg-pattern">
+    <!-- Navbar -->
+    <nav id="navbar" class="navbar navbar-expand navbar-dark bg-primary-local">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="/index">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle "
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Flight
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li>
+                <a class="dropdown-item" href="/check-flight">Check Flight</a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="/book-flight">Book Flight</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="/ticket-list">Check Ticket List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/confirm-admin">Confirm Transaction</a>
+          </li>
+        </ul>
+        <form class="d-flex">
+          <input
+            class="form-control"
+            type="search"
+            placeholder="Search"
+            aria-label="Search"
+          />
+          <button
+            id="search-button"
+            class="btn btn-primary btn-outline-primary text-light btn-sm text-nowrap mx-3"
+            type="submit"
+          >
+            Search Flight
+          </button>
+          <button id="logout-button" class="btn btn-danger btn-sm">
+            Logout
+          </button>
+        </form>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <h1 class="text-center mb-4">Edit Ticket - <%= ticket.ticket_id %></h1>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card border-primary">
+            <div class="card-header bg-primary text-white text-center">
+              Current Data
+            </div>
+            <div class="card-body">
+              <div class="mb-2">
+                <label for="currentPswt" class="form-label text-secondary"
+                  >Airline</label
+                >
+                <input
+                  type="text"
+                  id="currentPswt"
+                  class="form-control"
+                  value="<%= ticket.nama_pesawat %>"
+                  disabled
+                />
+              </div>
+              <div class="mb-2">
+                <label
+                  for="currentAirportFrom"
+                  class="form-label text-secondary"
+                  >Departure</label
+                >
+                <input
+                  type="text"
+                  id="currentAirportFrom"
+                  class="form-control"
+                  value="<%= ticket.country_origin %> - <%= ticket.airport_name_origin %> (<%= ticket.airport_code_origin %>)"
+                  disabled
+                />
+              </div>
+              <div class="mb-2">
+                <label for="currentAirportTo" class="form-label text-secondary"
+                  >Arrival</label
+                >
+                <input
+                  type="text"
+                  id="currentAirportTo"
+                  class="form-control"
+                  value="<%= ticket.country_destination %> - <%= ticket.airport_name_destination %> (<%= ticket.airport_code_destination %>)"
+                  disabled
+                />
+              </div>
+              <div class="mb-2">
+                <label for="currentClass" class="form-label text-secondary"
+                  >Class</label
+                >
+                <input
+                  type="text"
+                  id="currentClass"
+                  class="form-control"
+                  value="<%= ticket.class %>"
+                  disabled
+                />
+              </div>
+              <div class="mb-2">
+                <label for="price" class="form-label text-secondary"
+                  >Price</label
+                >
+                <input
+                  type="text"
+                  id="price"
+                  name="price"
+                  class="form-control"
+                  value="<%= ticket.price %>"
+                  disabled
+                />
+              </div>
+              <div class="mb-2">
+                <label for="currentTakeoff" class="form-label text-secondary"
+                  >Take Off</label
+                >
+                <input
+                  type="text"
+                  id="currentTakeoff"
+                  class="form-control"
+                  value="<%= ticket.take_off %>"
+                  disabled
+                />
+              </div>
+              <div class="mb-2">
+                <label for="currentLanding" class="form-label text-secondary"
+                  >Landing</label
+                >
+                <input
+                  type="text"
+                  id="currentLanding"
+                  class="form-control"
+                  value="<%= ticket.arrival %>"
+                  disabled
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <form
+            id="form-tiket"
+            class="card border-primary"
+            method="POST"
+            action="/ticket-edit/<%= ticket.ticket_id %>"
+          >
+            <div class="card-header bg-primary text-white text-center">
+              New Data
+            </div>
+            <div class="card-body">
+              <div class="mb-2">
+                <label for="pswt" class="form-label text-primary"
+                  >Airline</label
+                >
+                <select
+                  name="pesawat"
+                  id="pswt"
+                  class="form-select"
+                  required
+                ></select>
+              </div>
+              <div class="mb-2">
+                <label for="airportfrom" class="form-label text-primary"
+                  >Departure</label
+                >
+                <select
+                  name="airportfrom"
+                  id="airportfrom"
+                  class="form-select"
+                  required
+                ></select>
+              </div>
+              <div class="mb-2">
+                <label for="airportto" class="form-label text-primary"
+                  >Arrival</label
+                >
+                <select
+                  name="airportto"
+                  id="airportto"
+                  class="form-select"
+                  required
+                ></select>
+              </div>
+              <div class="mb-2">
+                <label for="class" class="form-label text-primary">Class</label>
+                <select name="class" id="class" class="form-select" required>
+                  <option hidden selected>Select Class</option>
+                  <option value="First">First Class</option>
+                  <option value="Business">Business</option>
+                  <option value="Premium">Premium Economy</option>
+                  <option value="Economy">Economy</option>
+                </select>
+              </div>
+              <div class="mb-2">
+                <label for="price" class="form-label text-primary">Price</label>
+                <div class="input-group">
+                  <span class="input-group-text">Rp.</span>
+                  <input
+                    type="text"
+                    id="price"
+                    name="price"
+                    class="form-control"
+                    placeholder="Enter Price"
+                    required
+                  />
+                </div>
+              </div>
+              <div class="mb-2">
+                <label for="takeoff" class="form-label text-primary"
+                  >Take Off</label
+                >
+                <input
+                  type="datetime-local"
+                  name="takeoff"
+                  id="takeoff"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-2">
+                <label for="landing" class="form-label text-primary"
+                  >Landing</label
+                >
+                <input
+                  type="datetime-local"
+                  name="landing"
+                  id="landing"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="d-flex justify-content-end mt-2">
+                <a
+                  href="/ticket-list"
+                  class="btn btn-light btn-outline-dark mx-3"
+                  >Back</a
+                >
+                <button class="btn btn-primary">Update</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/bootstrap.bundle.js"></script>
+    <script>
+      function formatPrice(input) {
+        let value = input.value.replace(/[^0-9]/g, ""); // Only numbers
+        input.value = formatRupiah(value); // Format the number with dots
+      }
+
+      function formatRupiah(angka) {
+        return angka.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const priceInput = document.getElementById("price");
+        priceInput.value = formatRupiah(
+          priceInput.value.replace(/[^0-9]/g, "")
+        ); // Format the price on load
+      });
+      
+      document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-button");
+
+        if (logoutButton) {
+          logoutButton.addEventListener("click", async () => {
+            logoutButton.disabled = true;
+            try {
+              const response = await fetch(`/logout?_=${Date.now()}`, {
+                method: "GET",
+              });
+
+              if (response.ok) {
+                window.location.href = "/";
+              } else {
+                alert("Failed to logout. Please try again.");
+              }
+            } catch (error) {
+              console.error("Error during logout:", error);
+              alert("An error occurred while logging out. Please try again.");
+            } finally {
+              logoutButton.disabled = false;
+            }
+          });
+        } else {
+          console.error("Logout button not found.");
+        }
+      });
+    </script>
+  </body>
+</html>

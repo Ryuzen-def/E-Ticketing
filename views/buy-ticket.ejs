@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Ticket - Buy Ticket</title>
+    <link rel="stylesheet" href="/css/font-awesome.css" />
+    <link rel="stylesheet" href="/css/all.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  </head>
+  <body class="bg-pattern">
+    <div class="min-vh-100 d-flex flex-column">
+      <!-- Back Button -->
+      <nav class="bg-primary-local shadow-sm p-2">
+        <div class="container mx-3">
+          <button onclick="history.back()" class="flex btn text-white">
+            <i class="fas fa-arrow-left"></i> <span>Back to Choose Flight</span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="container py-4">
+        <h1 class="fw-bold mb-4">Choose Seats</h1>
+
+        <div class="row g-4">
+          <!-- Left Column - Flight Info -->
+          <div class="col-lg-6">
+            <div class="card p-4 shadow-sm">
+              <form id="buy-ticket" method="post">
+                <h2 class="h5 fw-bold">Your Flight</h2>
+                <div class="text-muted">Ticket ID</div>
+                <div class="fw-bold mb-3" id="ticket-id">
+                  <%= ticket.ticket_id %>
+                </div>
+                <div id="passengerContainer"></div>
+                <!--
+                <div class="text-muted">Passenger Name</div>
+                <div class="fw-bold mb-3" id="departure">
+                    <input
+                    type="text"
+                    id="passengerName"
+                    name="passengerName"
+                    class="form-control"
+                    placeholder="Enter Passenger Name"
+                    required
+                  />
+                </div> -->
+                <div class="text-muted">Departure</div>
+                <div class="fw-bold mb-3" id="departure">
+                  <%= ticket.country_origin %> - <%= ticket.airport_name_origin %> (<%= ticket.airport_code_origin %>)
+                </div>
+
+                <div class="text-muted">Arrival</div>
+                <div class="fw-bold mb-3" id="arrival">
+                  <%= ticket.country_destination %> - <%= ticket.airport_name_destination %> (<%= ticket.airport_code_destination %>)
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-6">
+                    <div class="text-muted">Date</div>
+                    <div class="fw-bold" id="date"><%= ticket.date %></div>
+                  </div>
+                  <div class="col-6">
+                    <div class="text-muted">Quantity</div>
+                    <div class="fw-bold"><span id="quantity">0</span> people</div>
+                  </div>
+                </div>
+                <!-- Flight Details -->
+                <div
+                  class="d-flex align-items-center justify-content-between border-top pt-3 my-3"
+                >
+                  <div class="d-flex align-items-center gap-3">
+                    <div>
+                      <div class="fw-bold" id="airline">
+                        <%= ticket.nama_pesawat %>
+                      </div>
+                      <div class="text-muted small" id="duration">
+                        <%= ticket.takeoff %> - <%= ticket.landing %>
+                      </div>
+                    </div>
+                  </div>
+              
+                </div>
+                <!-- Transaction Details -->
+                <div class="border-top">
+                  <div class="my-3">
+                    <h2 class="h5 fw-bold">Transaction Details</h2>
+                    <div class="mb-3">
+                      <div class="text-muted">Selected Seats:</div>
+                      <div class="fw-bold" id="selectedSeats">None</div>
+                    </div>
+                    <div class="mb-3">
+                      <div class="text-muted">Subtotal:</div>
+                      <div class="fw-bold">
+                        IDR <span id="subtotal">0</span>
+                      </div>
+                    </div>
+                    <div class="mb-3">
+                      <div class="text-muted">Government Tax (11%):</div>
+                      <div class="fw-bold">IDR <span id="tax">0</span></div>
+                    </div>
+                    <div class="border-top pt-3">
+                      <div class="text-muted">Grand Total:</div>
+                      <div class="fw-bold">
+                        IDR <span id="grandTotal">0</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+             
+            </div>
+          </div>
+
+          <!-- Right Column - Seat Selection -->
+          <div class="col-lg-6">
+            <div class="bg-light p-4 rounded shadow-sm position-relative">
+              <h3 class="text-center text-dark fw-bold">Business Class</h3>
+              <div class="d-flex justify-content-center gap-4 my-3">
+                <div class="d-flex align-items-center gap-2">
+                  <div
+                    class="bg-white border border-primary rounded p-2"
+                    style="width: 20px; height: 20px"
+                  ></div>
+                  <span>Available</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <div
+                    class="bg-secondary border rounded p-2"
+                    style="width: 20px; height: 20px"
+                  ></div>
+                  <span>Booked</span>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                  <div
+                    class="bg-primary border rounded p-2"
+                    style="width: 20px; height: 20px"
+                  ></div>
+                  <span>Selected</span>
+                </div>
+              </div>
+              <div class="bg-white p-4 rounded">
+                <div
+                  id="seatGridContainer"
+                  class="d-flex flex-wrap gap-2 justify-content-center"
+                >
+                  <!-- Seats will be generated dynamically -->
+                </div>
+              </div>
+              <div class="text-center mt-3">
+                <button class="btn btn-primary w-100" type="submit" data-continue>
+                  Continue To Payment
+                </button>
+              </div>
+            </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap.bundle.js"></script>
+    <!-- JavaScript for Dynamic Seat Selection -->
+    <script>
+      async function fetchMaskapai() {
+        try {
+          const response = await fetch("http://localhost:3000/maskapai");
+          const users = await response.json();
+
+          const tableBody = document.getElementById("pswt");
+          tableBody.innerHTML =
+            "<option hidden selected>Select Maskapai</option>";
+
+          users.forEach((maskapai) => {
+            const row = `<option value="${maskapai.id_pesawat}">${maskapai.nama_pesawat}</option>`;
+            tableBody.innerHTML += row;
+          });
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      }
+      document.addEventListener("DOMContentLoaded", async function () {
+        const seatContainer = document.getElementById("seatGridContainer");
+        const passengerContainer = document.getElementById("passengerContainer");
+        const leftColumns = ["A", "B", "C"];
+        const rightColumns = ["D", "E", "F"];
+        const ticketId = document.getElementById("ticket-id").innerText.trim();
+        let selectedSeats = new Set();
+        let bookedSeats = new Set();
+
+        // **Fetch kursi yang sudah dipesan dari backend**
+        async function fetchBookedSeats() {
+            try {
+                const response = await fetch(`http://localhost:3000/booked-seats?ticket_id=${ticketId}`);
+                const data = await response.json();
+                if (data.success) {
+                    bookedSeats = new Set(data.bookedSeats);
+                }
+            } catch (error) {
+                console.error("Error fetching booked seats:", error);
+            }
+        }
+
+        await fetchBookedSeats(); // Ambil daftar kursi yang sudah dipesan sebelum membuat grid
+
+        function updateTransactionDetails() {
+            const selectedSeatsArray = Array.from(selectedSeats);
+            const seatPrice = `<%= ticket.price %>`;
+            const quantity = selectedSeatsArray.length;
+            const subtotal = seatPrice * quantity;
+            const tax = subtotal * 0.11;
+            const grandTotal = subtotal + tax;
+
+            document.getElementById("selectedSeats").innerText = selectedSeatsArray.join(", ") || "None";
+            document.getElementById("subtotal").innerText = subtotal.toLocaleString("id-ID");
+            document.getElementById("tax").innerText = tax.toLocaleString("id-ID");
+            document.getElementById("grandTotal").innerText = grandTotal.toLocaleString("id-ID");
+            document.getElementById("quantity").innerText = `${quantity}`;
+        }
+
+        function addPassengerInput(seat) {
+            const inputDiv = document.createElement("div");
+            inputDiv.classList.add("mb-3");
+            inputDiv.id = `passenger-${seat}`;
+
+            const label = document.createElement("label");
+            label.classList.add("text-muted");
+            label.innerText = `${seat}: Passenger Name`;
+
+            const input = document.createElement("input");
+            input.type = "text";
+            input.classList.add("form-control");
+            input.placeholder = "Enter Passenger Name";
+            input.required = true;
+
+            inputDiv.appendChild(label);
+            inputDiv.appendChild(input);
+            passengerContainer.appendChild(inputDiv);
+        }
+
+        function removePassengerInput(seat) {
+            const inputDiv = document.getElementById(`passenger-${seat}`);
+            if (inputDiv) {
+                inputDiv.remove();
+            }
+        }
+
+        function createColumn(columns) {
+            const groupDiv = document.createElement("div");
+            groupDiv.classList.add("d-flex", "gap-2");
+
+            columns.forEach((col) => {
+                const columnDiv = document.createElement("div");
+                columnDiv.classList.add("d-flex", "flex-column", "align-items-center");
+
+                for (let i = 1; i <= 8; i++) {
+                    const seatId = `${col}${i}`;
+                    const seat = document.createElement("button");
+                    seat.classList.add("btn", "btn-outline-primary", "m-1");
+                    seat.innerText = seatId;
+                    seat.dataset.seat = seatId;
+
+                    // **Cek apakah kursi sudah dipesan**
+                    if (bookedSeats.has(seatId)) {
+                        seat.classList.add("btn", "btn-outline-light", "bg-secondary");
+                        seat.disabled = true;
+                    } else {
+                        // **Tambahkan event listener untuk pemilihan kursi**
+                        seat.onclick = function () {
+                            if (selectedSeats.has(seatId)) {
+                                selectedSeats.delete(seatId);
+                                seat.classList.remove("btn-primary", "text-white");
+                                removePassengerInput(seatId);
+                            } else {
+                                selectedSeats.add(seatId);
+                                seat.classList.add("btn-primary", "text-white");
+                                addPassengerInput(seatId);
+                            }
+                            updateTransactionDetails();
+                        };
+                    }
+
+                    columnDiv.appendChild(seat);
+                }
+                groupDiv.appendChild(columnDiv);
+            });
+
+            return groupDiv;
+        }
+
+        const seatGrid = document.createElement("div");
+        seatGrid.classList.add("d-flex", "justify-content-center", "gap-3");
+
+        const leftGroup = createColumn(leftColumns);
+        const rightGroup = createColumn(rightColumns);
+        const aisleGap = document.createElement("div");
+        aisleGap.classList.add("mx-4");
+
+        seatGrid.appendChild(leftGroup);
+        seatGrid.appendChild(aisleGap);
+        seatGrid.appendChild(rightGroup);
+        seatContainer.appendChild(seatGrid);
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("buy-ticket");
+    const selectedSeats = new Map(); // Use a Map to store seat and passenger name pairs
+    const passengerContainer = document.getElementById("passengerContainer"); // Container for passenger name inputs
+
+    function updateTransactionDetails() {
+        const seatPrice = `<%= ticket.price %>`;
+        const selectedSeatsArray = Array.from(selectedSeats.entries());
+        const quantity = selectedSeatsArray.length;
+        const subtotal = seatPrice * quantity;
+        const tax = subtotal * 0.11;
+        const grandTotal = subtotal + tax;
+
+        // Prepare the display for selected seats and passenger names
+        const seatDetails = selectedSeatsArray.map(([seat, name]) => `${seat}`).join(", ") || "None";
+        document.getElementById("selectedSeats").innerText = seatDetails;
+        document.getElementById("subtotal").innerText = subtotal.toLocaleString("id-ID");
+        document.getElementById("tax").innerText = tax.toLocaleString("id-ID");
+        document.getElementById("grandTotal").innerText = grandTotal.toLocaleString("id-ID");
+        document.getElementById("quantity").innerText = `${quantity}`;
+    }
+
+    document.getElementById("seatGridContainer").addEventListener("click", (event) => {
+        if (event.target.tagName === "BUTTON") {
+            const seat = event.target.dataset.seat;
+
+            if (selectedSeats.has(seat)) {
+                selectedSeats.delete(seat);
+                event.target.classList.remove("btn-primary", "text-white");
+
+                // Remove the corresponding passenger input
+                const passengerInputs = passengerContainer.querySelectorAll("div.mb-3");
+                passengerInputs.forEach((inputDiv) => {
+                    if (inputDiv.querySelector("label").innerText === `Passenger Name for ${seat}`) {
+                        passengerContainer.removeChild(inputDiv);
+                    }
+                });
+            } else {
+                selectedSeats.set(seat, ""); // Initialize with an empty name
+                event.target.classList.add("btn-primary", "text-white");
+                addPassengerInput(seat); // Add input for passenger name
+            }
+            updateTransactionDetails();
+        }
+    });
+    
+    const apiUrl = "http://localhost:3000/order-ticket";
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+  
+      const ticketId = document.getElementById("ticket-id").innerText.trim();
+      const grandTotal = parseInt(document.getElementById("grandTotal").innerText.replace(/\D/g, ""));
+  
+      if (selectedSeats.size === 0) {
+          alert("Please select at least one seat.");
+          return;
+      }
+  
+      const passengerNames = Array.from(passengerContainer.querySelectorAll("input")).map(input => input.value.trim());
+      const seatDetails = Array.from(selectedSeats.keys()).map((seat, index) => ({
+          seat,
+          name: passengerNames[index] || "Unnamed"
+      }));
+
+        const data = {
+      ticket_id: ticketId,
+      seatNumbers: Array.from(selectedSeats.keys()).join(", "), // "A1, B1, C2"
+      grandTotal: grandTotal,
+      passengerName: passengerNames.join(", "), // "John Doe,Jane Doe"
+      qty: +document.getElementById("quantity").innerHTML
+  };
+
+  
+      console.log("Data being sent:", data); // Log the data being sent
+  
+            try {
+          const response = await fetch(apiUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+          if (response.ok) {
+              alert(result.message);
+
+              // Simpan orderId ke cookie agar bisa digunakan untuk redirect
+              document.cookie = `orderId=${result.orderId}; path=/; max-age=3600`; // Berlaku selama 1 jam
+
+              // Ambil kembali orderId dari cookie
+              const orderId = getCookie("orderId");
+
+              // Redirect ke halaman transaksi
+              window.location.href = `/transaction/${orderId}&${ticketId}`;
+          } else {
+              alert(result.message);
+          }
+      } catch (error) {
+          console.error("Error:", error);
+      }
+
+      // Fungsi untuk mengambil nilai cookie berdasarkan nama
+      function getCookie(name) {
+          const cookies = document.cookie.split("; ");
+          for (const cookie of cookies) {
+              const [key, value] = cookie.split("=");
+              if (key === name) {
+                  return value;
+              }
+          }
+          return null;
+      }
+  });
+});
+    </script>
+  </body>
+</html>

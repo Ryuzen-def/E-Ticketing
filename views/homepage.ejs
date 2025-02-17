@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skyventurer - Home</title>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/font-awesome.css">
+  <link rel="stylesheet" href="/css/all.css">
+</head>
+
+<body class="bg-home">
+  <!-- Navbar -->
+  <nav id="navbar" class="navbar navbar-expand navbar-dark bg-primary-local">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto" id="nav-links">
+        <li class="nav-item"><a class="nav-link active" href="/homepage">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">Flight </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/check-flight">Check Flight</a></li>
+            <li><a class="dropdown-item" href="/book-flight">Book Flight</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control" type="search" placeholder="Search" aria-label="Search" />
+        <button id="search-button" class="btn btn-primary btn-sm text-nowrap mx-3" type="submit">Search Flight</button>
+        <button id="logout-button" class="btn btn-danger text-nowrap btn-sm">Logout</button>
+      </form>
+    </div>
+  </nav>
+  
+
+
+  <!-- Hero Section -->
+  <div class="hero-overlay">
+    <div class="container">
+      <h1>Find Your Best Flight Deals</h1>
+      <p>Explore the world with Skyventurer</p>
+
+      <!-- Search Box -->
+      <div class="search-box">
+        <form action="/search-flight" method="get">
+            <div class="row g-2 justify-content-center">
+                <!-- Departure -->
+                <div class="col-md-3 d-flex align-items-center search-container">
+                    <span class="input-group-text d-flex justify-content-center"><i class="fas fa-plane-departure"></i></span>
+                    <select class="form-select" name="from">
+                        <option selected disabled>From</option>
+                        <option value="jakarta">Jakarta (CGK - Soekarno-Hatta)</option>
+                        <option value="bali">Bali (DPS - Ngurah Rai)</option>
+                        <option value="aceh">Aceh (BTJ - Sultan Iskandar Muda)</option>
+                        <option value="papua">Papua (DJJ - Sentani)</option>
+                        <option value="maluku">Maluku (AMQ - Pattimura)</option>
+                        <option value="kalimantan_timur">Kalimantan Timur (BPN - Sepinggan)</option>
+                        <option value="sulawesi_utara">Sulawesi Utara (MDC - Sam Ratulangi)</option>
+                        <option value="sumatera_utara">Sumatera Utara (MES - Polonia)</option>
+                        <option value="kalimantan_barat">Kalimantan Barat (PNK - Supadio)</option>
+                        <option value="sulawesi_selatan">Sulawesi Selatan (UPG - Sultan Hasanuddin)</option>
+                    </select>
+                </div>
+    
+                <!-- Arrival -->
+                <div class="col-md-3 d-flex align-items-center search-container">
+                    <span class="input-group-text d-flex justify-content-center"><i class="fas fa-plane-arrival"></i></span>
+                    <select class="form-select" name="to">
+                        <option selected disabled>To</option>
+                        <option value="jakarta">Jakarta (CGK - Soekarno-Hatta)</option>
+                        <option value="bali">Bali (DPS - Ngurah Rai)</option>
+                        <option value="aceh">Aceh (BTJ - Sultan Iskandar Muda)</option>
+                        <option value="papua">Papua (DJJ - Sentani)</option>
+                        <option value="maluku">Maluku (AMQ - Pattimura)</option>
+                        <option value="kalimantan_timur">Kalimantan Timur (BPN - Sepinggan)</option>
+                        <option value="sulawesi_utara">Sulawesi Utara (MDC - Sam Ratulangi)</option>
+                        <option value="sumatera_utara">Sumatera Utara (MES - Polonia)</option>
+                        <option value="kalimantan_barat">Kalimantan Barat (PNK - Supadio)</option>
+                        <option value="sulawesi_selatan">Sulawesi Selatan (UPG - Sultan Hasanuddin)</option>
+                    </select>
+                </div>
+    
+                <!-- Date -->
+                <div class="col-md-3 d-flex align-items-center search-container">
+                    <span class="input-group-text d-flex justify-content-center"><i class="fas fa-calendar-alt"></i></span>
+                    <input type="date" class="form-control" name="date">
+                </div>
+    
+                <!-- Search Button -->
+                <div class="col-md-2">
+                    <button type="submit" class="btn search-button w-100">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+  <!-- News Section -->
+<section class="news-section">
+  <div class="container">
+      <h2 class="text-center mb-4 text-primary-local mb-5">Latest News & Promotions</h2>
+      <div class="row">
+          <div class="col-md-4">
+              <div class="news-card">
+                  <img src="/image/news1.jpg" alt="Promo 1">
+                  <h5 class="mt-3">Special Flight Discount</h5>
+                  <p>Get up to 30% off on selected flights this season.</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="news-card">
+                  <img src="/image/news2.jpg" alt="Promo 2">
+                  <h5 class="mt-3">New Destinations Available</h5>
+                  <p>Explore new destinations with our latest routes.</p>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="news-card">
+                  <img src="/image/news3.jpg" alt="Promo 3">
+                  <h5 class="mt-3">Luxury Cabin Experience</h5>
+                  <p>Upgrade to business class with exclusive discounts.</p>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+  <script src="/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const logoutButton = document.getElementById("logout-button");
+
+        if (logoutButton) {
+          logoutButton.addEventListener("click", async () => {
+            logoutButton.disabled = true;
+            try {
+              const response = await fetch(`/logout?_=${Date.now()}`, {
+                method: "GET",
+              });
+
+              if (response.ok) {
+                window.location.href = "/";
+              } else {
+                alert("Failed to logout. Please try again.");
+              }
+            } catch (error) {
+              console.error("Error during logout:", error);
+              alert("An error occurred while logging out. Please try again.");
+            } finally {
+              logoutButton.disabled = false;
+            }
+          });
+        } else {
+          console.error("Logout button not found.");
+        }
+      });
+      document.addEventListener("DOMContentLoaded", function() {
+          fetch("/session")
+            .then(response => response.json())
+            .then(data => {
+              if (data.success && data.user) {
+                const isAdmin = data.user.isAdmin === "Y";
+                const navLinks = document.getElementById("nav-links");
+                
+                if (isAdmin) {
+                  navLinks.innerHTML += `
+                    <li class="nav-item"><a class="nav-link" href="/ticket-list">Check Ticket List</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/confirm-admin">Confirm Transaction</a></li>
+                  `;
+                }
+              }
+            })
+            .catch(error => console.error("Error fetching session data:", error));
+        });
+  </script>
+</body>
+
+</html>
