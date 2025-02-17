@@ -32,6 +32,14 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Set direktori static untuk file statis (misalnya CSS, JS)
 app.use(express.static(path.join(__dirname, 'src')));
+const storagePath = path.join(__dirname, 'storage');
+console.log('Full storage path:', storagePath);
+
+// Konfigurasi static middleware dengan logging
+app.use('/storage', (req, res, next) => {
+  console.log('Requested image path:', req.url);
+  next();
+}, express.static(storagePath));
 
 // Start the server
 const PORT = process.env.PORT || 3000;
