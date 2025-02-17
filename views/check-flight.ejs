@@ -16,6 +16,55 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <style>
+      /* CSS untuk modal gambar */
+      .modal {
+        margin-top: 10vh;
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        padding-top: 50px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.9);
+      }
+      
+      .modal-content {
+        margin: auto;
+        display: block;
+        width: 80%;
+        max-width: 700px;
+        position: relative;
+      }
+      
+      .close-image-modal {
+        color: #fff;
+        position: absolute;
+        right: 25px;
+        top: 0;
+        font-size: 35px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      
+      #modalImage {
+        display: block;
+        margin: 0 auto;
+        max-width: 100%;
+        max-height: 80vh;
+        object-fit: contain;
+      }
+      
+      .close-image-modal:hover,
+      .close-image-modal:focus {
+        color: #999;
+        text-decoration: none;
+        cursor: pointer;
+      }
+      </style>
   </head>
   <body class="bg-pattern">
      <!-- Navbar -->
@@ -35,6 +84,10 @@
             </ul>
           </li>
           <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+          <% if (user.isAdmin == 'Y') {%>
+            <li class="nav-item"><a class="nav-link" href="/ticket-list">Check Ticket List</a></li>
+            <li class="nav-item"><a class="nav-link" href="/confirm-admin">Confirm Transaction</a></li>
+          <% } %>
         </ul>
         <form class="d-flex">
           <input class="form-control" type="search" placeholder="Search" aria-label="Search" />
@@ -43,8 +96,6 @@
         </form>
       </div>
     </nav>
-
-
     <!-- Content -->
     <h1 class="text-center my-4"><strong>Transaction History</strong></h1>
     <div class="container my-4">
@@ -56,6 +107,7 @@
             <th scope="col">Transaction Date</th>
             <th scope="col">Grand Total</th>
             <th scope="col">Status</th>
+            <th scope="col">Proof</th>
             <th scope="col">View</th>
           </tr>
         </thead>
@@ -64,12 +116,10 @@
     </div>
 
     <!-- Modal -->
-    <div id="ticketDetailModal" class="modal">
+    <div id="imageModal" class="modal">
       <div class="modal-content">
-        <span class="close-btn">&times;</span>
-        <div id="ticketDetailContent">
-          <!-- Konten modal akan diisi melalui JavaScript -->
-        </div>
+        <span class="close-image-modal">&times;</span>
+        <img id="modalImage" src="" alt="Payment Proof" style="width: 100%; height: auto;">
       </div>
     </div>
 
@@ -78,79 +128,136 @@
     <script src="/js/bootstrap.bundle.js"></script>
     <script>
       async function fetchTicketing() {
-        try {
-          const response = await fetch("http://localhost:3000/checkflight");
+  try {
+    const response = await fetch("http://localhost:3000/checkflight");
 
-          if (!response.ok) {
-            throw new Error(`Failed to fetch data. Status: ${response.status}`);
-          }
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data. Status: ${response.status}`);
+    }
 
-          const ticketing = await response.json();
+    const ticketing = await response.json();
 
-          if (!Array.isArray(ticketing)) {
-            throw new Error(
-              "Expected an array of tickets, but got something else."
-            );
-          }
+    if (!Array.isArray(ticketing)) {
+      throw new Error("Expected an array of tickets, but got something else.");
+    }
 
-          // Render data tiket ke tabel
-          renderTickets(ticketing);
-        } catch (error) {
-          console.error("Error while fetching ticketing data:", error);
-        }
+    // Render data tiket ke tabel
+    renderTickets(ticketing);
+  } catch (error) {
+    console.error("Error while fetching ticketing data:", error);
+  }
+}
+
+  window.onload = fetchTicketing;
+
+  function renderTickets(ticketing) {
+  const tableBody = document.getElementById("ticket-table-body");
+  tableBody.innerHTML = "";
+
+  ticketing.forEach((ticket) => {
+    const imageUrl = ticket.proof ? `http://localhost:3000${ticket.proof}` : null;
+
+    // Membuat tombol "View Proof"
+    const proofButton = ticket.proof 
+      ? `<button class="btn btn-primary btn-sm view-proof-btn" onclick="openImageModal('${imageUrl}')">View Proof</button>` 
+      : '<div class="proof-cell">No proof</div>';
+
+    // Membuat tombol "Detail"
+    const detailButton = `
+      <button class="btn btn-outline-dark btn-sm view-ticket-btn" data-ticket-id="${ticket.ticket_id}">
+        Detail
+      </button>
+    `;
+
+    let isConfirmed = "";
+      switch (ticket.isConfirmed) { 
+        case "Y":
+          isConfirmed = "Confirmed";
+          break;
+        default:
+          isConfirmed = "Pending Admin";
       }
 
-      function renderTickets(ticketing) {
-        const tableBody = document.getElementById("ticket-table-body");
-        tableBody.innerHTML = ""; // Kosongkan isi tabel sebelum diisi ulang
+    const row = `
+      <tr>
+        <td>${ticket.transaction_id}</td>
+        <td>${ticket.ticket_id}</td>
+        <td>${formatDate(ticket.transaction_date)}</td>
+        <td>Rp. ${formatPrice(ticket.grand_total)}</td>
+        <td>${isConfirmed}</td>
+        <td>${proofButton}</td>
+        <td>${detailButton}</td>
+      </tr>
+    `;
+    tableBody.innerHTML += row;
+  });
+}
 
-        function formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = date.toLocaleString("en", { month: "short" });
-        const year = date.getFullYear();
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
+// Fungsi untuk membuka modal gambar
+function openImageModal(imageUrl) {
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  
+  // Tambahkan event listener untuk loading
+  modalImg.onload = function() {
+    modal.style.display = "block";
+  };
+  
+  modalImg.onerror = function() {
+    alert('Failed to load image');
+  };
+  
+  modalImg.src = imageUrl;
+}
 
-        return `${day}-${month}-${year} ${hours}:${minutes}`;
-      }
+// Event listener untuk menutup modal
+document.querySelector('.close-image-modal').addEventListener('click', function() {
+  document.getElementById('imageModal').style.display = "none";
+});
 
-        ticketing.forEach((ticket) => {
-          let className = "";
-          switch (ticket.class) {
-            case "First":
-              className = "First Class";
-              break;
-            case "Business":
-              className = "Business";
-              break;
-            case "Premium":
-              className = "Premium Economy";
-              break;
-            case "Economy":
-              className = "Economy";
-              break;
-            default:
-              className = "Unknown";
-          }
+// Menutup modal ketika mengklik di luar gambar
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('imageModal');
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
 
-          const row = `
-            <tr>
-              <td>${ticket.transaction_id}</td>
-              <td>${ticket.ticket_id}</td>
-              <td>${formatDate(ticket.transaction_date)}</td>
-              <td>Rp. ${formatPrice(ticket.grand_total)}</td>
-              <td>${ticket.isPaid}</td>
-              <td>
-                <button class="btn btn-outline-dark btn-sm view-ticket-btn" data-ticket-id="${
-                  ticket.ticket_id
-                }">Detail</button>
-              </td>
-            </tr>
-          `;
-          tableBody.innerHTML += row;
-        });
-      }
+// Menutup modal dengan tombol ESC
+document.addEventListener('keydown', function(event) {
+  if (event.key === "Escape") {
+    document.getElementById('imageModal').style.display = "none";
+  }
+});
+
+// Fungsi untuk membuka modal gambar
+function openImageModal(imageUrl) {
+  const modal = document.getElementById('imageModal');
+  const modalImg = document.getElementById('modalImage');
+  
+  modal.style.display = "block";
+  modalImg.src = imageUrl;
+}
+
+// Event listener untuk menutup modal
+document.querySelector('.close-image-modal').addEventListener('click', function() {
+  document.getElementById('imageModal').style.display = "none";
+});
+
+// Menutup modal ketika mengklik di luar gambar
+window.addEventListener('click', function(event) {
+  const modal = document.getElementById('imageModal');
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+// Menutup modal dengan tombol ESC
+document.addEventListener('keydown', function(event) {
+  if (event.key === "Escape") {
+    document.getElementById('imageModal').style.display = "none";
+  }
+});
 
       window.onload = fetchTicketing;
 
@@ -225,140 +332,122 @@
       const modalContent = document.getElementById("ticketDetailContent");
       const closeModal = document.querySelector(".close-btn");
 
-      // Event untuk tombol "View Ticket"
-      ticketTableBody.addEventListener("click", async (event) => {
-        if (event.target.closest(".view-ticket-btn")) {
-          event.preventDefault();
+// Event listener untuk tombol "View Ticket"
+document.getElementById("ticket-table-body").addEventListener("click", async (event) => {
+  const button = event.target.closest(".view-ticket-btn");
+  if (button) {
+    event.preventDefault();
 
-          const ticketId = event.target
-            .closest(".view-ticket-btn")
-            .getAttribute("data-ticket-id");
+    // Ambil ticketId dari atribut data-ticket-id
+    const ticketId = button.getAttribute("data-ticket-id");
 
-          try {
-            const response = await fetch(
-              `http://localhost:3000/ticket/${ticketId}`
-            );
-            if (!response.ok) {
-              throw new Error("Failed to fetch ticket details");
-            }
+    try {
+      // Fetch detail tiket dari server
+      const response = await fetch(`http://localhost:3000/ticket/${ticketId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch ticket details");
+      }
 
-            const ticket = await response.json();
+      const ticket = await response.json();
 
-            let className = "";
-            switch (ticket.class) {
-              case "First":
-                className = "First Class";
-                break;
-              case "Business":
-                className = "Business";
-                break;
-              case "Premium":
-                className = "Premium Economy";
-                break;
-              case "Economy":
-                className = "Economy";
-                break;
-              default:
-                className = "Unknown";
-            }
+      // Format kelas tiket
+      let className = "";
+      switch (ticket.class) { 
+        case "First":
+          className = "First Class";
+          break;
+        case "Business":
+          className = "Business";
+          break;
+        case "Premium":
+          className = "Premium Economy";
+          break;
+        case "Economy":
+          className = "Economy";
+          break;
+        default:
+          className = "Unknown";
+      }
 
-            // Format dan masukkan data ke dalam modal
-            modalContent.innerHTML = `
-          <div class="ticket-modal">
-                <div class="ticket-details-container">
-                  <div class="content-ticket">
-                    <h1 class="ticket-title"><strong>Ticket Detail</strong></h1>
-                      <div class="details-grid">
-                        <div>
-                          <p><strong>Ticket ID</strong></p>
-                          <p>${ticket.ticket_id}</p>
-                        </div>
-                        <div>
-                          <p><strong>Airlines</strong></p>
-                          <p>${ticket.nama_pesawat}</p>
-                        </div>
-                        <div>
-                          <p><strong>Price</strong></p>
-                          <p>Rp. ${formatPrice(ticket.price)}</p>
-                        </div>
-                        <div>
-                          <p><strong>Departure</strong></p>
-                          <p>${ticket.country_origin} - ${
-                          ticket.airport_name_origin
-                          } (${ticket.airport_code_origin})</p>
-                        </div>
-                        <div>
-                          <p><strong>Arrival</strong></p>
-                          <p>${ticket.country_destination} -
-                             ${ticket.airport_name_destination} (${ticket.airport_code_destination})</p>
-                        </div>
-                        <div>
-                          <p><strong>Class</strong></p>
-                          <p>${className}</p>
-                        </div>
-                        <div>
-                          <p><strong>Take Off</strong></p>
-                          <p>${formatDate(ticket.takeoff)}</p>
-                        </div>
-                        <div>
-                          <p><strong>Landing</strong></p>
-                          <p>${formatDate(ticket.landing)}</p>
-                        </div>
-                        <div>
-                        </div>
-                      </div>
-                  </div>
-      </div>
+      // Masukkan data ke dalam modal
+      document.getElementById("ticketDetailContent").innerHTML = `
+        <div class="ticket-modal">
+          <div class="ticket-details-container">
+            <div class="content-ticket">
+              <h1 class="ticket-title"><strong>Ticket Detail</strong></h1>
+              <div class="details-grid">
+                <div>
+                  <p><strong>Ticket ID</strong></p>
+                  <p>${ticket.ticket_id}</p>
+                </div>
+                <div>
+                  <p><strong>Airlines</strong></p>
+                  <p>${ticket.nama_pesawat}</p>
+                </div>
+                <div>
+                  <p><strong>Price</strong></p>
+                  <p>Rp. ${formatPrice(ticket.price)}</p>
+                </div>
+                <div>
+                  <p><strong>Departure</strong></p>
+                  <p>${ticket.country_origin} - ${ticket.airport_name_origin} (${ticket.airport_code_origin})</p>
+                </div>
+                <div>
+                  <p><strong>Arrival</strong></p>
+                  <p>${ticket.country_destination} - ${ticket.airport_name_destination} (${ticket.airport_code_destination})</p>
+                </div>
+                <div>
+                  <p><strong>Class</strong></p>
+                  <p>${className}</p>
+                </div>
+                <div>
+                  <p><strong>Take Off</strong></p>
+                  <p>${formatDate(ticket.takeoff)}</p>
+                </div>
+                <div>
+                  <p><strong>Landing</strong></p>
+                  <p>${formatDate(ticket.landing)}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
 
+      // Tampilkan modal
+      const modal = document.getElementById("ticketDetailModal");
+      modal.style.display = "block";
+    } catch (error) {
+      console.error("Error fetching ticket details:", error);
+      document.getElementById("ticketDetailContent").innerHTML = `
+        <p class="text-danger">Failed to load ticket details. Please try again.</p>
+      `;
+      const modal = document.getElementById("ticketDetailModal");
+      modal.style.display = "block";
+    }
+  }
+});
+// Event untuk tombol close
+document.querySelector(".close-btn").addEventListener("click", () => {
+  const modal = document.getElementById("ticketDetailModal");
+  modal.style.display = "none";
+});
 
-              `;
+// Tutup modal jika klik di luar area modal
+window.addEventListener("click", (event) => {
+  const modal = document.getElementById("ticketDetailModal");
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
 
-            // Tampilkan modal
-            modal.style.display = "block";
-          } catch (error) {
-            console.error("Error fetching ticket details:", error);
-            modalContent.innerHTML = `<p class="text-danger">Failed to load ticket details. Please try again.</p>`;
-          }
-        }
-      });
-
-      // Event untuk menutup modal
-      closeModal.addEventListener("click", () => {
-        modal.style.display = "none";
-      });
-
-      // Tutup modal jika klik di luar konten modal
-      window.addEventListener("click", (event) => {
-        if (event.target === modal) {
-          modal.style.display = "none";
-        }
-      });
-      // Tutup modal jika menekan tombol Escape (Esc)
-      document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape" && modal.style.display === "block") {
-          modal.style.display = "none";
-        }
-      });
-
-      
-  document.addEventListener("DOMContentLoaded", function() {
-          fetch("/session")
-            .then(response => response.json())
-            .then(data => {
-              if (data.success && data.user) {
-                const isAdmin = data.user.isAdmin === "Y";
-                const navLinks = document.getElementById("nav-links");
-                
-                if (isAdmin) {
-                  navLinks.innerHTML += `
-                    <li class="nav-item"><a class="nav-link" href="/ticket-list">Check Ticket List</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/confirm-admin">Confirm Transaction</a></li>
-                  `;
-                }
-              }
-            })
-            .catch(error => console.error("Error fetching session data:", error));
-        });
+// Tutup modal jika menekan tombol Escape (Esc)
+document.addEventListener("keydown", (event) => {
+  const modal = document.getElementById("ticketDetailModal");
+  if (event.key === "Escape" && modal.style.display === "block") {
+    modal.style.display = "none";
+  }
+});
     </script>
   </body>
 </html>
