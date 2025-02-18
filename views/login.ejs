@@ -82,57 +82,86 @@
     <script src="/js/bootstrap.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script>
-      // API URL (replace with your backend URL)
-      const apiUrl = "http://localhost:3000/login";
+// API URL (replace with your backend URL)
+const apiUrl = "http://localhost:3000/login";
 
-      // Handle form submission
-      document
-        .getElementById("loginForm")
-        .addEventListener("submit", async function (event) {
-          event.preventDefault(); // Prevent form from submitting normally
+// Handle form submission
+document.getElementById("loginForm").addEventListener("submit", async function (event) {
+  event.preventDefault(); // Prevent form from submitting normally
 
-          // Get values from the form
-          const id = document.getElementById("id").value;
-          const password = document.getElementById("password").value;
+  // Get values from the form
+  const id = document.getElementById("id").value.trim();
+  const password = document.getElementById("password").value.trim();
 
-          // Create the login data
-          const loginData = {
-            id: id,
-            password: password,
-          };
+  // Validate input fields
+  if (!id || !password) {
+    document.getElementById("message").textContent = "ID and password are required.";
+    document.getElementById("message").style.color = "red";
+    return;
+  }
 
-          try {
-            // Make the POST request to the backend
-            const response = await fetch(apiUrl, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(loginData),
-            });
+  // Create the login data
+  const loginData = {
+    id: id,
+    password: password,
+  };
 
-            const result = await response.json();
+  try {
+    // Make the POST request to the backend
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(loginData),
+    });
 
-            // Check for successful login
-            if (response.ok) {
-              // Show success message
-              document.getElementById("message").textContent =
-                "Login successful!";
-              document.getElementById("message").style.color = "gre en";
-              location.href = "/homepage";
-            } else {
-              // Show error message
-              document.getElementById("message").textContent =
-                result.error || "Login failed!";
-              document.getElementById("message").style.color = "red";
-            }
-          } catch (error) {
-            // Handle network or other errors
-            document.getElementById("message").textContent =
-              "Error: " + error.message;
-            document.getElementById("message").style.color = "red";
-          }
-        });
+    const result = await response.json();
+
+    // Check for successful login
+    if (response.ok) {
+      // Save user data to localStorage
+      localStorage.setItem("user", JSON.stringify(result.user.name));
+
+      // Show success message
+      document.getElementById("message").textContent = "Login successful!";
+      document.getElementById("message").style.color = "green";
+
+      // Redirect to the homepage after a short delay
+      setTimeout(() => {
+        location.href = "/homepage";
+      }, 1000); // Delay for 1 second to show the success message
+    } else {
+      // Show error message
+      document.getElementById("message").textContent = result.error || "Login failed!";
+      document.getElementById("message").style.color = "red";
+    }
+  } catch (error) {
+    // Handle network or other errors
+    document.getElementById("message").textContent = "Error: " + error.message;
+    document.getElementById("message").style.color = "red";
+  }
+});
+// Fungsi untuk logout
+async function logout() {
+  try {
+    const response = await fetch('/api/logout', {
+      method: 'POST',
+    });
+
+    if (response.ok) {
+      // Hapus data user dari localStorage
+      localStorage.removeItem('user');
+      alert('Logout successful!');
+      window.location.href = '/login'; // Redirect ke halaman login
+    } else {
+      alert('Logout failed.');
+    }
+  } catch (error) {
+    console.error('Error during logout:', error);
+    alert('An error occurred. Please try again.');
+  }
+}
     </script>
   </body>
 </html>

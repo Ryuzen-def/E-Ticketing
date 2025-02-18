@@ -18,7 +18,7 @@
     />
     <style>
       /* CSS untuk modal gambar */
-      .modal {
+      .image-modal {
         margin-top: 10vh;
         display: none;
         position: fixed;
@@ -32,7 +32,7 @@
         background-color: rgba(0, 0, 0, 0.9);
       }
       
-      .modal-content {
+      .image-modal-content {
         margin: auto;
         display: block;
         width: 80%;
@@ -74,7 +74,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto" id="nav-links">
-          <li class="nav-item"><a class="nav-link" href="/index">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="/homepage">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="#">About</a></li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">Flight </a>
@@ -116,10 +116,16 @@
     </div>
 
     <!-- Modal -->
-    <div id="imageModal" class="modal">
-      <div class="modal-content">
+    <div id="imageModal" class="image-modal">
+      <div class="image-modal-content">
         <span class="close-image-modal">&times;</span>
         <img id="modalImage" src="" alt="Payment Proof" style="width: 100%; height: auto;">
+      </div>
+    </div>
+    <div id="ticketDetailModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <div id="ticketDetailContent"></div>
       </div>
     </div>
 

@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
   </head>
-  <body class="bg-pattern">
+  <body>
     <div class="min-vh-100 d-flex flex-column">
       <!-- Back Button -->
       <nav class="bg-primary-local shadow-sm p-2">
@@ -223,24 +223,31 @@
         }
 
         function addPassengerInput(seat) {
-            const inputDiv = document.createElement("div");
-            inputDiv.classList.add("mb-3");
-            inputDiv.id = `passenger-${seat}`;
+          const inputDiv = document.createElement("div");
+          inputDiv.classList.add("mb-3");
+          inputDiv.id = `passenger-${seat}`;
 
-            const label = document.createElement("label");
-            label.classList.add("text-muted");
-            label.innerText = `${seat}: Passenger Name`;
+          const label = document.createElement("label");
+          label.classList.add("text-muted");
+          label.innerText = `${seat}: Passenger Name  `;
 
-            const input = document.createElement("input");
-            input.type = "text";
-            input.classList.add("form-control");
-            input.placeholder = "Passenger Name";
-            input.required = true;
+          const input = document.createElement("input");
+          input.type = "text";
+          input.classList.add("form-control");
+          input.placeholder = "Enter Passenger Name";
+          input.required = true;
 
-            inputDiv.appendChild(label);
-            inputDiv.appendChild(input);
-            passengerContainer.appendChild(inputDiv);
-        }
+          // Ambil nilai dari localStorage dengan key "user" dan hilangkan tanda kutip
+          let savedUser = localStorage.getItem("user");
+          if (savedUser) {
+              input.value = JSON.parse(savedUser); // Parsing JSON untuk menghapus tanda kutip
+          }
+
+          inputDiv.appendChild(label);
+          inputDiv.appendChild(input);
+          passengerContainer.appendChild(inputDiv);
+      }
+
 
         function removePassengerInput(seat) {
             const inputDiv = document.getElementById(`passenger-${seat}`);
